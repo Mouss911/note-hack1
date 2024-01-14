@@ -1,135 +1,122 @@
-import React, { useState } from 'react';
-import { MdEdit, MdDelete } from "react-icons/md";
+// import { MdEdit, MdDelete  } from "react-icons/md";
+// import React, { useState, useEffect } from 'react';
+import Form from "./Form";
+// import EnteteNotes from "./EnteteNotes";
+// import GroupeBtns from "./GroupeBtns";
+import BackgroundColor from "./BackgroundColor";
+// import Notes from "./Notes";
+// import Button from "./Button";
+import ContainerNotes from "./ContainerNotes";
+import { NoteProvider, useNoteContext } from "./NoteContext";
 
-const Notehack = () => {
-    const [notes, setNotes] = useState([]);
-
-    const [backgroundColor, setBackgroundColor] = useState("");
-
-    const changeBackgroundColor = (color) => {
-      setBackgroundColor(color);
-    };
-
-    const changeBackgroundColorWithProps = (color, buttonClass) => {
-      // Faites quelque chose avec les propriétés spécifiques, si nécessaire
-      console.log(`Changement de couleur vers ${color} avec le bouton de classe ${buttonClass}`);
-      changeBackgroundColor(color);
-    }; 
-
-    const addNote = () => {
-        const newNote = {
-          title: newNoteTitle,
-          timestamp: new Date().toLocaleString(),
-        };
-      
-        setNotes((prevNotes) => [...prevNotes, newNote]);
-        setNewNoteTitle("");
-      };
-
-    // const addNote = () => {
-    //   if (editingIndex !== null) {
-    //     // Modification de la note existante
-    //     const updatedNotes = [...notes];
-    //     updatedNotes[editingIndex].title = newTitle;
-    //     setNewTitle(""); // Réinitialiser la valeur du champ de saisie avant la modification
-    //     setNotes(updatedNotes);
-    //     setEditingIndex(null);
-    //   } else {
-    //     // Ajout d'une nouvelle note
-    //     const newNote = {
-    //       title: newTitle,
-    //       timestamp: new Date().toLocaleString(),
-    //     };
-    //     setNotes((prevNotes) => [...prevNotes, newNote]);
-    //     setNewTitle("");
-    //   }
-    // };
-    
-    
-
-    const clearAllNotes = () => {
-        setNotes([]);
-      };
-      
-    const [newNoteTitle, setNewNoteTitle] = useState("");
-
-    // Suppression
-    const removeNote = (index) => {
-      const updatedNotes = [...notes];
-      updatedNotes.splice(index, 1);
-      setNotes(updatedNotes);
-    };
-
-    // Mise à jour
-    // const [editingIndex, setEditingIndex] = useState(null);
-    // const [newTitle, setNewTitle] = useState("");
-    
-    // const startEditing = (index) => {
-    //   setEditingIndex(index);
-    //   setNewTitle(notes[index].title);
-    // };
-
-       
-    
-    
-      
+const NotehackContent = () => {
+  const {
+    valueInput,
+    handleChange,
+    listeNote,
+    isEditing,
+    handleEdit,
+    handleDelete,
+    handleDeleteAll,
+    width,
+    height,
+    colorBackground,
+    backgroundContainer,
+    handleSubmit,
+    numberNote,
+  } = useNoteContext();
 
   return (
-    <div className={`corps ${backgroundColor}`}>
-      <div className='row rounded-3 p-3 bg-white d-flex justify-content-around my-4 ligne1'>
-        <div className='col'><p>NoteHack</p></div>
-        <div className='col gap-3 text-end'>
-          <button className='b1' onClick={() => changeBackgroundColorWithProps("#4dc9e6", 'b1')}></button>
-          <button className='b2' onClick={() => changeBackgroundColorWithProps("#a9c9ff", 'b2')}></button>
-          <button className='b3' onClick={() => changeBackgroundColorWithProps("#fa8bff", 'b3')}></button>
-          <button className='b4' onClick={() => changeBackgroundColorWithProps("#ff512f", 'b4')}></button>
-          <button className='b5' onClick={() => changeBackgroundColorWithProps("#fd8451", 'b5')}></button>
-          <button className='b6' onClick={() => changeBackgroundColorWithProps("#85ffbd", 'b6')}></button>
-        </div>
-
-      </div>
-
-      <div className='row mt-5'>
-        <div className='col d-flex p-3 bg-white rounded-2'>
-            <input
-                placeholder='Add note'
-                className="form-control me-2 border-black"
-                value={newNoteTitle}
-                onChange={(e) => setNewNoteTitle(e.target.value)}
-            />
-            <button className='btn btn-success px-3' onClick={addNote}>Add</button>
-        </div>
-      </div>
-
-      <div className='row mt-5 rounded-3 bg-white mb-4'>
-        <div className='col-12 mt-4 p-3 d-flex justify-content-between'>
-            <p className='fw-bold'>Notes : {notes.length}</p>
-            <button className='btn btn-primary' onClick={clearAllNotes}>Clear All</button>
-        </div>
-        <hr />
-
-        <div className='row my-4 gy-2'>
-            {notes.map((note, index) => (
-            <div key={index} className='col-md-4 col-sm-12'>
-                <div class='card'>
-                    <div class='card-body'>
-                        <div className='d-flex justify-content-between'>
-                            <h5 class='card-title'>{note.title}</h5>
-                            <h5>
-                                <MdEdit className='text-primary mod' />
-                                <MdDelete onClick={() => removeNote(index)} className='text-danger sup' />
-                            </h5>
-                        </div>
-                        <p class='card-text'>{note.timestamp}</p>
-                    </div>
-                </div>
-            </div>
-            ))}
-        </div>
-        
-      </div>
+    <div className="container-fluid pt-3 pb-5 min-vh-100" style={{ backgroundImage: colorBackground }}>
+      <BackgroundColor height={height} width={width} backgroundContainer={backgroundContainer} />
+      <Form type='text' value={valueInput} onChange={handleChange} onSubmit={handleSubmit} placeholder='Add note' isEditing={isEditing} />
+      <ContainerNotes listeNote={listeNote} handleEdit={handleEdit} handleDelete={handleDelete} handleDeleteAll={handleDeleteAll} numberNote={numberNote} />
     </div>
-  )
+  );
+};
+
+function Notehack() {
+  
+  // const [valueInput, setValueInput] = useState('')
+  // const [listeNote, setListeNote] = useState(JSON.parse(localStorage.getItem('listeNote')) || [])
+  // const [isEditing, setIsEditing] = useState(false)
+  // const [noteEditingId, setNoteEditingId] = useState('')
+  // const [width, setWidth] = useState('20px')
+  // const [height, setHeight] = useState('20px')
+  // const [colorBackground, setColorBackground] = useState(JSON.parse(localStorage.getItem('colorBackground')) || 'linear-gradient(90deg, #4dc9e6, #210cac)')
+  // const numberNote = listeNote.length
+
+  // Gérer le changement dans les champs de formulaire
+  // const handleChange = (e) => {
+  //   setValueInput(e.target.value);
+  // }
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();  
+  //   if (valueInput !== '') {
+  //     let note
+  //     if (isEditing) {
+  //       note = listeNote.map(noteEdit => 
+  //         noteEdit.id === noteEditingId ?
+  //           {
+  //             value : valueInput, 
+  //             timestamp: new Date().toLocaleString(),
+  //             isEditing : noteEditingId
+  //           }
+  //          : noteEdit
+  //       )        
+  //     }else{
+  //         note =  {
+  //         id : Math.floor(Math.random() * 10000),
+  //         value : valueInput, 
+  //         timestamp: new Date().toLocaleString(),
+  //         isEditing : false
+  //       }
+  //       note = [...listeNote, note]
+        
+  //     }
+  //     setListeNote(note);
+  //     setIsEditing(false)
+  //     setValueInput('');
+  //   }else{
+  //     alert("Entrez d'abord une note!")
+  //   }
+  // }
+
+  // const handleEdit = (noteId) => {
+  //   setIsEditing(true)
+  //   const note = listeNote.find(note => noteId === note.id)
+  //   setValueInput(note.value)
+  //   setNoteEditingId(note.id)
+  // }
+
+  // const handleDelete = (noteId) => {
+  //   const note = listeNote.filter(note => noteId !== note.id)
+  //   setListeNote(note)
+  // }
+
+  // const handleDeleteAll = () => {
+  //   setListeNote([])
+  // }
+
+  // const backgroundContainer = (backgroundImage,) => {
+  //   setColorBackground(backgroundImage)
+  //   setWidth("20px")
+  //   setHeight("20px")
+  // }
+  
+  // useEffect(() => {
+  //   localStorage.setItem('listeNote', JSON.stringify(listeNote))
+  //   localStorage.setItem('colorBackground', JSON.stringify(colorBackground))
+  // }, [listeNote, colorBackground])
+
+
+  return (
+    <NoteProvider>
+      <NotehackContent />
+    </NoteProvider>
+    
+  );
 }
 
 export default Notehack;

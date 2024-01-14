@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Créez le contexte
+
 const NoteContext = createContext();
 
-// Créez un composant fournisseur pour envelopper votre application
+// Créez un composant fournisseur
 const NoteProvider = ({ children }) => {
   const [valueInput, setValueInput] = useState('');
   const [listeNote, setListeNote] = useState(JSON.parse(localStorage.getItem('listeNote')) || []);
@@ -78,9 +78,8 @@ const NoteProvider = ({ children }) => {
     localStorage.setItem('colorBackground', JSON.stringify(colorBackground))
   }, [listeNote, colorBackground])
 
-  // ... Ajoutez d'autres fonctions de gestion de l'état ici ...
 
-  // Encapsulez les valeurs et fonctions dans le contexte
+  
   const contextValue = {
     valueInput,
     setValueInput,
@@ -103,13 +102,12 @@ const NoteProvider = ({ children }) => {
     handleDeleteAll,
     backgroundContainer,
     handleSubmit,
-    // ... Ajoutez d'autres fonctions à inclure dans le contexte ici ...
   };
 
   return <NoteContext.Provider value={contextValue}>{children}</NoteContext.Provider>;
 };
 
-// Créez un hook personnalisé pour utiliser le contexte
+// hook personnalisé pour utiliser le contexte
 const useNoteContext = () => {
   const context = useContext(NoteContext);
   if (!context) {
